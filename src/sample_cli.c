@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include "razerdevice.h"
 #include "razerkbd_driver.h"
+#include "razermousemat_driver.h"
 
 int main(int argc, const char * argv[]) {
     RazerDevices allDevices = getAllRazerDevices();
@@ -17,6 +18,22 @@ int main(int argc, const char * argv[]) {
         {
             printf("Found blackwidow v3 pro keyboard (wired)\n");
             razer_attr_write_mode_wave(device.usbDevice, "1", 0, 0x90);
+        }
+
+        if (device.productId == 0x0c06)
+        {
+            printf("Found goliathus 3xl mouse mat!\n");
+            printf("Setting mode to static\n");
+
+            uint8_t rgb[3];
+            rgb[0] = 0;
+            rgb[1] = 255;
+            rgb[2] = 0;
+
+            char *buf = (char *) rgb;
+
+            // razer_mouse_mat_attr_write_mode_spectrum(device.usbDevice, "1", 0);
+            razer_mouse_mat_attr_write_mode_static(device.usbDevice, buf, 3);
         }
     }
 
